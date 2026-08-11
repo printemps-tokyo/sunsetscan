@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test --all
+      - run: cargo build --release
+      # The catalog has to render and the CLI has to run. --as-of is pinned so
+      # this step does not start failing on its own the week a sunset lands.
+      - run: ./target/release/sunsetscan --list --as-of 2026-08-11 --no-color
+      # Self-scan under --strict. The files that legitimately quote the
+      # catalog's own patterns are listed in .sunsetscanignore.
+      - run: ./target/release/sunsetscan . --strict --no-color --as-of 2026-08-11

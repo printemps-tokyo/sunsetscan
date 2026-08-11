@@ -1,0 +1,14 @@
+# sunsetscan quotes the strings it searches for in several of its own files.
+# That is the textual-matching caveat in action rather than a bug, so the
+# self-scan in CI skips them and the rest of the tree must come back clean.
+#
+#   src/catalog.json  the catalog data itself
+#   src/catalog.rs    doc comments and tests that name patterns to explain them
+#   src/matcher.rs    boundary tests, whose whole job is matching these literals
+#   tests/            fixture repositories built out of real call sites
+#   README.md         the catalog table and the worked examples
+src/catalog.json
+src/catalog.rs
+src/matcher.rs
+tests/
+README.md
