@@ -34,3 +34,12 @@ jobs:
       # Self-scan under --strict. The files that legitimately quote the
       # catalog's own patterns are listed in .sunsetscanignore.
       - run: ./target/release/sunsetscan . --strict --no-color --as-of 2026-08-11
+
+  # The oldest Rust this crate promises to build with (rust-version in
+  # Cargo.toml). A dependency update that needs a newer one fails here.
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@1.88
+      - run: cargo test --locked --all
