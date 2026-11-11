@@ -25,7 +25,7 @@ exit code you can put in CI.
 ```
 $ sunsetscan .
 sunsetscan: support-service
-as of 2026-08-11  |  <=30d  |  18 finding(s) in 4 file(s), 5 of 10 catalog entr(ies) matched
+as of 2026-08-11  |  <=30d  |  18 finding(s) in 4 file(s), 5 of 24 catalog entr(ies) matched
 nearest deadline: 2026-08-18  Content API for Shopping (7 days remaining)
 
 [<=30d   ] openai-assistants-api  Assistants API
@@ -38,7 +38,7 @@ nearest deadline: 2026-08-18  Content API for Shopping (7 days remaining)
                threads to conversations, so every call site has to be found and rewritten
                by hand.
   guide        https://developers.openai.com/api/docs/assistants/migration
-  source       https://developers.openai.com/api/docs/deprecations (verified 2026-08-11)
+  source       https://developers.openai.com/api/docs/deprecations (verified 2026-11-11)
   13 finding(s) in 3 file(s)
   app/support_bot.py
     8:20  ASSISTANT = client.beta.assistants.create(
@@ -201,8 +201,10 @@ would expect it to do.
 
 ## Built-in catalog
 
-Every entry below was read from the vendor's own page on **2026-08-11**. Nothing
-is in the catalog that was not confirmed there.
+Every entry below was read from the vendor's own page on **2026-11-11**: the
+entries first verified on 2026-08-11 were re-read, and the rest were added that
+day. Nothing is in the catalog that was not confirmed there. Entries whose date
+has passed stay in the catalog and are reported as `PAST DUE`.
 
 | Sunset | Entry id | What goes away | Replacement | Source |
 | --- | --- | --- | --- | --- |
@@ -211,14 +213,31 @@ is in the catalog that was not confirmed there.
 | 2026-08-26 | `openai-assistants-api` | Assistants API: `/v1/assistants`, `/v1/threads`, `client.beta.assistants`, `client.beta.threads` | Responses API and Conversations API | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) / [migration guide](https://developers.openai.com/api/docs/assistants/migration) |
 | 2026-09-24 | `openai-videos-api` | Videos API, `sora-2` aliases and snapshots | none announced | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
 | 2026-09-28 | `openai-legacy-completion-models` | `gpt-3.5-turbo-instruct`, `gpt-3.5-turbo-1106`, `babbage-002`, `davinci-002` | `gpt-5.6-terra` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
-| 2026-10-23 | `openai-legacy-chat-models` | `gpt-4-turbo`, `gpt-4-0613`, `gpt-4o-2024-05-13`, `gpt-image-1`, `o1-*`, `o3-mini-*`, `o4-mini-*` and more | `gpt-5.6-*` / `gpt-image-2` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2026-10-23 | `openai-legacy-chat-models` | `gpt-4-turbo`, `gpt-4-0613`, `gpt-4o-2024-05-13`, `gpt-image-1`, `o1-*`, `o3-mini-*`, `o4-mini-*` and more | `gpt-5.6-*` / `gpt-image-2.5-sunburst` or `gpt-image-2.5-flare` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2026-11-17 | `google-gemini-preview-audio-live` | `gemini-3.1-flash-tts-preview`, `gemini-3.1-flash-live-preview`, `gemini-2.5-flash-native-audio-preview-12-2025`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | `gemini-3.8-flash-tts`, `gemini-3.8-flash-lite-tts` or `gemini-3.8-live` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
+| 2026-11-30 | `anthropic-claude-sonnet-4-5` | `claude-sonnet-4-5-20250929` | `claude-sonnet-5-5` | [Anthropic model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations) |
 | 2026-11-30 | `openai-prompts-api` | `v1/prompts` API and reusable prompt objects | prompt content in application code | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
-| 2026-12-01 | `openai-gpt-image-legacy` | `gpt-image-1-mini`, `gpt-image-1.5`, `chatgpt-image-latest` | `gpt-image-2` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2026-12-01 | `google-gemini-2-5-flash` | `gemini-2.5-flash` (requests are rerouted, not rejected) | `gemini-3.5-flash-lite` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
+| 2026-12-01 | `google-gemini-2-5-pro` | `gemini-2.5-pro` (requests are rerouted, not rejected) | `gemini-3.8-flash` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
+| 2026-12-01 | `openai-gpt-image-legacy` | `gpt-image-1-mini`, `gpt-image-1.5`, `chatgpt-image-latest` | `gpt-image-2.6-sunburst` or `gpt-image-2.6-flare` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2026-12-03 | `google-gemini-omni-1-1-flash` | `gemini-omni-1.1-flash` (requests are rerouted, not rejected) | `gemini-omni-1.2-flash` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
 | 2026-12-11 | `openai-gpt5-snapshots` | `gpt-5-2025-08-07`, `gpt-5-mini/nano/pro` snapshots, `o3-2025-04-16`, `o3-pro-2025-06-10` | `gpt-5.6-sol` / `terra` / `luna` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-01-06 | `openai-tts-models` | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` and its two snapshots | `gpt-realtime-2.1-mini` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-01-14 | `openai-gpt4-series-snapshots` | `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, `gpt-4o-mini-2024-07-18`, `gpt-4.1-2025-04-14`, `gpt-4.1-mini-2025-04-14` | `gpt-6-luna` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
 | 2027-01-20 | `openai-legacy-audio-realtime` | `gpt-realtime`, `gpt-audio`, `gpt-4o-realtime`, `gpt-4o-audio`, mini variants, `gpt-4o-mini-transcribe-2025-03-20` | `gpt-realtime-2.1`, `gpt-audio-1.5`, `gpt-4o-mini-transcribe-2025-12-15` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-02-01 | `openai-gpt-5-5-cyber-preview` | `gpt-5.5-cyber-preview` | the most capable cyber model available to you | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-02-10 | `openai-gpt-image-2` | `gpt-image-2`, `gpt-image-2-2026-04-21` | `gpt-image-2.6-sunburst` or `gpt-image-2.6-flare` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-02-26 | `openai-transcription-models` | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-12-15`, `gpt-4o-transcribe-diarize`, `/v1/audio/translations` | `gpt-live-transcribe` or `gpt-transcribe`; `v1/realtime/translations` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) / [transcription guide](https://developers.openai.com/api/docs/guides/transcription) |
+| 2027-03-15 | `google-gemini-2-5-flash-image` | `gemini-2.5-flash-image` | `gemini-3.1-flash-lite-image` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
+| 2027-04-01 | `openai-gpt-5-1-codex-nano` | `gpt-5.3-codex`, `gpt-5.1`, `gpt-5.1-2025-11-13`, `gpt-5.4-nano`, `gpt-5.4-nano-2026-03-17` | `gpt-6-sol` / `gpt-6-luna` | [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) |
+| 2027-05-07 | `google-gemini-3-1-flash-lite` | `gemini-3.1-flash-lite` | `gemini-3.5-flash-lite` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
+| 2028-05-14 | `google-gemini-embedding-001` | `gemini-embedding-001` | `gemini-embedding-2` | [Gemini deprecations](https://aistudio.google.com/docs/deprecations) |
 
 `sunsetscan --list` prints the same table with days remaining and the full
 pattern set for each entry.
+
+The Gemini dates are what Google's page calls the earliest possible shutdown
+dates; the exact date is communicated by Google with advance notice.
 
 **Vendors move dates.** The report footer and `--list` both print the
 verification date and tell you to confirm against the `source_url`. Treat the
@@ -339,8 +358,8 @@ The consequences are exactly the point:
   "schema": 1,
   "root": "support-service",
   "as_of": "2026-08-11",
-  "catalog_verified_on": "2026-08-11",
-  "entries_searched": 10,
+  "catalog_verified_on": "2026-11-11",
+  "entries_searched": 24,
   "totals": { "findings": 18, "files_with_findings": 4, "entries_matched": 5 },
   "stats": { "scanned": 4, "skipped_extension": 1, "skipped_large": 0,
              "skipped_binary": 0, "skipped_unreadable": 0 },
@@ -351,7 +370,7 @@ The consequences are exactly the point:
       "entry": {
         "id": "openai-assistants-api", "vendor": "OpenAI", "name": "Assistants API",
         "sunset": "2026-08-26", "days_remaining": 15, "urgency": "critical",
-        "source_url": "...", "verified_on": "2026-08-11",
+        "source_url": "...", "verified_on": "2026-11-11",
         "replacement": "...", "migration": "...", "migration_url": "...", "notes": "..."
       },
       "count": 13,

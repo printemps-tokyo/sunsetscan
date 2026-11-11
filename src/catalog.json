@@ -9,7 +9,7 @@
   // dying API actually writes: REST paths, SDK property paths, and model ids.
   // See the `kind` field documentation in README.md for the match semantics.
   "schema": 1,
-  "verified_on": "2026-08-11",
+  "verified_on": "2026-11-11",
   "entries": [
     {
       "id": "openai-chat-latest-aliases",
@@ -17,7 +17,7 @@
       "name": "gpt-5.2-chat-latest / gpt-5.3-chat-latest",
       "sunset": "2026-08-10",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "gpt-5.6-sol",
       "migration": "Point the model parameter at gpt-5.6-sol. Announced 2026-05-08.",
       "patterns": [
@@ -31,10 +31,11 @@
       "name": "Content API for Shopping",
       "sunset": "2026-08-18",
       "source_url": "https://developers.google.com/merchant/api/guides/compatibility/overview",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "Merchant API",
       "migration": "Move from https://shoppingcontent.googleapis.com/content/v2.1/ to https://merchantapi.googleapis.com/{SUB_API}/v1/. Resources are addressed by a hierarchical name (accounts/{account}/products/{product}) instead of separate merchantId and productId parameters, and the client libraries default to gRPC. If you need more time, Google offers an extended-access application.",
       "migration_url": "https://developers.google.com/merchant/api/guides/compatibility/start-migration",
+      "notes": "As read on 2026-11-11 the overview page says the Content API for Shopping was sunset on August 18, 2026, and that starting September 1, 2026 its requests experience progressive errors.",
       "patterns": [
         {
           "text": "shoppingcontent.googleapis.com",
@@ -54,11 +55,11 @@
       "name": "Assistants API",
       "sunset": "2026-08-26",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "Responses API and Conversations API",
       "migration": "Assistants become prompt objects that hold the model, tools and instructions; threads become conversations; runs become responses; run steps become items. openai.beta.threads.create() becomes openai.conversations.create(), and openai.beta.threads.runs.create(assistant_id=..., thread_id=...) becomes openai.responses.create(prompt={\"id\": ...}, input=[...], conversation=...). OpenAI states it will not provide an automated tool for migrating threads to conversations, so every call site has to be found and rewritten by hand.",
       "migration_url": "https://developers.openai.com/api/docs/assistants/migration",
-      "notes": "Announced 2025-08-26 with one year of notice. The deprecations page names no grace period past the shutdown date.",
+      "notes": "Announced 2025-08-26 with one year of notice. The deprecations page names no grace period past the shutdown date. The statement about no automated migration tool was read in the migration guide on 2026-08-11; as read on 2026-11-11 the guide instead opens by saying the Assistants API was officially sunset on August 26, 2026 and is no longer available.",
       "patterns": [
         { "text": "/v1/assistants", "kind": "substring", "note": "REST endpoint" },
         { "text": "/v1/threads", "kind": "substring", "note": "REST endpoint" },
@@ -90,7 +91,7 @@
       "name": "Videos API and Sora 2 models",
       "sunset": "2026-09-24",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "none announced",
       "migration": "The deprecations table lists no recommended replacement for the Videos API or the Sora 2 aliases and snapshots. Announced 2026-03-24.",
       "patterns": [
@@ -107,7 +108,7 @@
       "name": "Legacy completion models",
       "sunset": "2026-09-28",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "gpt-5.6-terra",
       "migration": "Replace the model id with gpt-5.6-terra. gpt-3.5-turbo-instruct, babbage-002 and davinci-002 are text-completion models, so callers on /v1/completions also need to move to the Responses API.",
       "patterns": [
@@ -123,9 +124,9 @@
       "name": "Legacy GPT-4 / o-series models",
       "sunset": "2026-10-23",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
-      "replacement": "gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna or gpt-image-2, depending on the model",
-      "migration": "Per the deprecations table: gpt-3.5-turbo-0125 -> gpt-5.6-terra; gpt-4-0613, gpt-4-1106-preview, gpt-4-turbo, gpt-4o-2024-05-13, o1-2024-12-17 and o3-mini-2025-01-31 -> gpt-5.6-sol; o1-pro-2025-03-19 -> gpt-5.6-sol with reasoning.mode pro; gpt-4.1-nano -> gpt-5.6-luna; o4-mini-2025-04-16 and ft-o4-mini-2025-04-16 -> gpt-5.6-terra; gpt-image-1 -> gpt-image-2.",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, or gpt-image-2.5-sunburst / gpt-image-2.5-flare, depending on the model",
+      "migration": "Per the deprecations table: gpt-3.5-turbo-0125 -> gpt-5.6-terra; gpt-4-0613, gpt-4-1106-preview, gpt-4-turbo, gpt-4o-2024-05-13, o1-2024-12-17 and o3-mini-2025-01-31 -> gpt-5.6-sol; o1-pro-2025-03-19 -> gpt-5.6-sol with reasoning.mode pro; gpt-4.1-nano -> gpt-5.6-luna; o4-mini-2025-04-16 and ft-o4-mini-2025-04-16 -> gpt-5.6-terra; gpt-image-1 -> gpt-image-2.5-sunburst or gpt-image-2.5-flare.",
       "patterns": [
         { "text": "gpt-3.5-turbo-0125", "kind": "token", "note": "model snapshot" },
         { "text": "gpt-4-0613", "kind": "token", "note": "model snapshot" },
@@ -142,15 +143,79 @@
       ]
     },
     {
+      "id": "google-gemini-preview-audio-live",
+      "vendor": "Google",
+      "name": "Gemini preview TTS, Live and native-audio models",
+      "sunset": "2026-11-17",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-3.8-flash-tts, gemini-3.8-flash-lite-tts or gemini-3.8-live",
+      "migration": "Per the deprecations tables: gemini-3.1-flash-tts-preview, gemini-2.5-flash-preview-tts and gemini-2.5-pro-preview-tts -> gemini-3.8-flash-tts or gemini-3.8-flash-lite-tts; gemini-3.1-flash-live-preview and gemini-2.5-flash-native-audio-preview-12-2025 -> gemini-3.8-live.",
+      "notes": "The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-3.1-flash-tts-preview", "kind": "token", "note": "preview model id" },
+        { "text": "gemini-3.1-flash-live-preview", "kind": "token", "note": "preview model id" },
+        { "text": "gemini-2.5-flash-native-audio-preview-12-2025", "kind": "token", "note": "preview model id" },
+        { "text": "gemini-2.5-flash-preview-tts", "kind": "token", "note": "preview model id" },
+        { "text": "gemini-2.5-pro-preview-tts", "kind": "token", "note": "preview model id" }
+      ]
+    },
+    {
+      "id": "anthropic-claude-sonnet-4-5",
+      "vendor": "Anthropic",
+      "name": "Claude Sonnet 4.5",
+      "sunset": "2026-11-30",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "claude-sonnet-5-5",
+      "migration": "Replace the model id with claude-sonnet-5-5. Requests to a model past its retirement date fail. Announced 2026-09-30.",
+      "migration_url": "https://platform.claude.com/docs/en/about-claude/models/migration-guide",
+      "notes": "The date applies to Anthropic-operated platforms (the Claude API, Claude Platform on AWS, Claude Models on Google Cloud (Anthropic managed) and Microsoft Foundry). Amazon Bedrock and Claude Models on Google Cloud (Google managed) set their own retirement schedules.",
+      "patterns": [
+        { "text": "claude-sonnet-4-5-20250929", "kind": "token", "note": "model id" }
+      ]
+    },
+    {
       "id": "openai-prompts-api",
       "vendor": "OpenAI",
       "name": "v1/prompts API and reusable prompt objects",
       "sunset": "2026-11-30",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "prompt content moved into application code",
       "migration": "Move reusable prompt content out of dashboard prompt objects and into your application code. Announced 2026-06-03. Note that the Assistants migration guide recommends referencing prompt objects from responses.create(prompt={\"id\": ...}); those objects are themselves scheduled to shut down on this date.",
+      "migration_url": "https://developers.openai.com/api/docs/guides/prompting/migrate-from-prompt-object",
       "patterns": [{ "text": "/v1/prompts", "kind": "substring", "note": "REST endpoint" }]
+    },
+    {
+      "id": "google-gemini-2-5-flash",
+      "vendor": "Google",
+      "name": "Gemini 2.5 Flash",
+      "sunset": "2026-12-01",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-3.5-flash-lite",
+      "migration": "Change the model id to gemini-3.5-flash-lite and review the breaking API changes in the Gemini 3.5 Flash-Lite migration guide before December 1, 2026.",
+      "migration_url": "https://aistudio.google.com/docs/whats-new-gemini-3.6#migrate-to-gemini-3-5-flash-lite",
+      "notes": "Not a hard failure: effective December 1, 2026, API requests to gemini-2.5-flash automatically route to gemini-3.5-flash-lite and are billed at Gemini 3.5 Flash-Lite rates. gemini-2.5-flash-lite is not deprecated. The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-2.5-flash", "kind": "token", "note": "model id" }
+      ]
+    },
+    {
+      "id": "google-gemini-2-5-pro",
+      "vendor": "Google",
+      "name": "Gemini 2.5 Pro",
+      "sunset": "2026-12-01",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-3.8-flash",
+      "migration": "Change the model id to gemini-3.8-flash and review the breaking API changes in the Gemini 3.8 Flash migration guide before December 1, 2026.",
+      "migration_url": "https://aistudio.google.com/docs/whats-new-gemini-3.8#migrate-to-gemini-3-8-flash",
+      "notes": "Not a hard failure: effective December 1, 2026, API requests to gemini-2.5-pro automatically route to gemini-3.8-flash and are billed at Gemini 3.8 Flash rates. The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-2.5-pro", "kind": "token", "note": "model id" }
+      ]
     },
     {
       "id": "openai-gpt-image-legacy",
@@ -158,13 +223,28 @@
       "name": "Older GPT Image models",
       "sunset": "2026-12-01",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
-      "replacement": "gpt-image-2",
-      "migration": "Replace the model id with gpt-image-2. Announced 2026-06-02.",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-image-2.6-sunburst or gpt-image-2.6-flare",
+      "migration": "Replace the model id with gpt-image-2.6-sunburst or gpt-image-2.6-flare. Announced 2026-06-02.",
+      "notes": "Until 2026-08-11 the deprecations table recommended gpt-image-2, which is now deprecated itself (see openai-gpt-image-2).",
       "patterns": [
         { "text": "gpt-image-1-mini", "kind": "token", "note": "model alias" },
         { "text": "gpt-image-1.5", "kind": "token", "note": "model alias" },
         { "text": "chatgpt-image-latest", "kind": "token", "note": "model alias" }
+      ]
+    },
+    {
+      "id": "google-gemini-omni-1-1-flash",
+      "vendor": "Google",
+      "name": "Gemini Omni 1.1 Flash",
+      "sunset": "2026-12-03",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-omni-1.2-flash",
+      "migration": "Change the model id to gemini-omni-1.2-flash.",
+      "notes": "Not a hard failure: the table says that effective December 3, 2026 the endpoint automatically routes API requests to gemini-omni-1.2-flash. The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-omni-1.1-flash", "kind": "token", "note": "model id" }
       ]
     },
     {
@@ -173,7 +253,7 @@
       "name": "Older GPT-5 and o3 snapshots",
       "sunset": "2026-12-11",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "gpt-5.6-sol, gpt-5.6-terra or gpt-5.6-luna",
       "migration": "Per the deprecations table: gpt-5-2025-08-07, o3-2025-04-16 -> gpt-5.6-sol; gpt-5-mini-2025-08-07 -> gpt-5.6-terra; gpt-5-nano-2025-08-07 -> gpt-5.6-luna; gpt-5-pro-2025-10-06 and o3-pro-2025-06-10 -> gpt-5.6-sol with reasoning.mode pro. Announced 2026-06-11.",
       "patterns": [
@@ -186,12 +266,48 @@
       ]
     },
     {
+      "id": "openai-tts-models",
+      "vendor": "OpenAI",
+      "name": "Text-to-speech models",
+      "sunset": "2027-01-06",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-realtime-2.1-mini",
+      "migration": "Migrate to gpt-realtime-2.1-mini; the deprecations page points at the Realtime API guide to plan the migration. Announced 2026-10-01.",
+      "migration_url": "https://developers.openai.com/api/docs/guides/realtime",
+      "patterns": [
+        { "text": "tts-1", "kind": "token", "note": "model id" },
+        { "text": "tts-1-hd", "kind": "token", "note": "model id" },
+        { "text": "gpt-4o-mini-tts", "kind": "token", "note": "model alias" },
+        { "text": "gpt-4o-mini-tts-2025-03-20", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4o-mini-tts-2025-12-15", "kind": "token", "note": "model snapshot" }
+      ]
+    },
+    {
+      "id": "openai-gpt4-series-snapshots",
+      "vendor": "OpenAI",
+      "name": "GPT-4o, GPT-4o mini, GPT-4.1 and GPT-4.1 mini snapshots",
+      "sunset": "2027-01-14",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-6-luna",
+      "migration": "Replace the model id with gpt-6-luna. Announced 2026-10-14.",
+      "notes": "The deprecations table names only these dated snapshots, so the bare aliases (gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini) are not matched. Fine-tuned versions follow the same shutdown schedule as their base models.",
+      "patterns": [
+        { "text": "gpt-4o-2024-08-06", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4o-2024-11-20", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4o-mini-2024-07-18", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4.1-2025-04-14", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4.1-mini-2025-04-14", "kind": "token", "note": "model snapshot" }
+      ]
+    },
+    {
       "id": "openai-legacy-audio-realtime",
       "vendor": "OpenAI",
       "name": "Legacy audio, realtime and transcription models",
       "sunset": "2027-01-20",
       "source_url": "https://developers.openai.com/api/docs/deprecations",
-      "verified_on": "2026-08-11",
+      "verified_on": "2026-11-11",
       "replacement": "gpt-realtime-2.1, gpt-realtime-2.1-mini, gpt-audio-1.5 or gpt-4o-mini-transcribe-2025-12-15",
       "migration": "Per the deprecations table: gpt-realtime, gpt-4o-realtime -> gpt-realtime-2.1; gpt-realtime-mini, gpt-4o-mini-realtime -> gpt-realtime-2.1-mini; gpt-audio, gpt-audio-mini, gpt-4o-audio, gpt-4o-mini-audio -> gpt-audio-1.5; gpt-4o-mini-transcribe-2025-03-20 -> gpt-4o-mini-transcribe-2025-12-15. Announced 2026-07-20.",
       "patterns": [
@@ -208,6 +324,112 @@
           "kind": "token",
           "note": "model snapshot"
         }
+      ]
+    },
+    {
+      "id": "openai-gpt-5-5-cyber-preview",
+      "vendor": "OpenAI",
+      "name": "GPT-5.5-Cyber preview",
+      "sunset": "2027-02-01",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "the most capable cyber model available to you",
+      "migration": "The deprecations table names no specific model: migrate to the most capable cyber model available to you before the shutdown date. Announced 2026-11-05.",
+      "patterns": [
+        { "text": "gpt-5.5-cyber-preview", "kind": "token", "note": "model id" }
+      ]
+    },
+    {
+      "id": "openai-gpt-image-2",
+      "vendor": "OpenAI",
+      "name": "GPT Image 2",
+      "sunset": "2027-02-10",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-image-2.6-sunburst or gpt-image-2.6-flare",
+      "migration": "Replace the model id with gpt-image-2.6-sunburst or gpt-image-2.6-flare. Announced 2026-11-10.",
+      "patterns": [
+        { "text": "gpt-image-2", "kind": "token", "note": "model alias" },
+        { "text": "gpt-image-2-2026-04-21", "kind": "token", "note": "model snapshot" }
+      ]
+    },
+    {
+      "id": "openai-transcription-models",
+      "vendor": "OpenAI",
+      "name": "Transcription models and the audio translations endpoint",
+      "sunset": "2027-02-26",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-live-transcribe or gpt-transcribe; v1/realtime/translations for translation",
+      "migration": "Per the deprecations table: whisper-1, gpt-4o-transcribe, gpt-4o-mini-transcribe, gpt-4o-mini-transcribe-2025-12-15 and gpt-4o-transcribe-diarize -> gpt-live-transcribe or gpt-transcribe; /v1/audio/translations -> v1/realtime/translations. The transcription guide warns that changing only the model id does not preserve every capability, so check the output formats and metadata your application needs. Announced 2026-08-26.",
+      "migration_url": "https://developers.openai.com/api/docs/guides/transcription",
+      "notes": "gpt-4o-mini-transcribe-2025-12-15 is also the replacement the table recommends for gpt-4o-mini-transcribe-2025-03-20 (see openai-legacy-audio-realtime), so that migration target itself shuts down on this date.",
+      "patterns": [
+        { "text": "whisper-1", "kind": "token", "note": "model id" },
+        { "text": "gpt-4o-transcribe", "kind": "token", "note": "model alias" },
+        { "text": "gpt-4o-mini-transcribe", "kind": "token", "note": "model alias" },
+        { "text": "gpt-4o-mini-transcribe-2025-12-15", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-4o-transcribe-diarize", "kind": "token", "note": "model id" },
+        { "text": "/v1/audio/translations", "kind": "substring", "note": "REST endpoint" }
+      ]
+    },
+    {
+      "id": "google-gemini-2-5-flash-image",
+      "vendor": "Google",
+      "name": "Gemini 2.5 Flash Image",
+      "sunset": "2027-03-15",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-3.1-flash-lite-image",
+      "migration": "Change the model id to gemini-3.1-flash-lite-image.",
+      "notes": "The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-2.5-flash-image", "kind": "token", "note": "model id" }
+      ]
+    },
+    {
+      "id": "openai-gpt-5-1-codex-nano",
+      "vendor": "OpenAI",
+      "name": "GPT-5.3-Codex, GPT-5.1 and GPT-5.4-Nano",
+      "sunset": "2027-04-01",
+      "source_url": "https://developers.openai.com/api/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gpt-6-sol or gpt-6-luna",
+      "migration": "Per the deprecations table: gpt-5.3-codex, gpt-5.1 and gpt-5.1-2025-11-13 -> gpt-6-sol; gpt-5.4-nano and gpt-5.4-nano-2026-03-17 -> gpt-6-luna. Announced 2026-10-01 with six months of notice.",
+      "patterns": [
+        { "text": "gpt-5.3-codex", "kind": "token", "note": "model id" },
+        { "text": "gpt-5.4-nano", "kind": "token", "note": "model alias" },
+        { "text": "gpt-5.4-nano-2026-03-17", "kind": "token", "note": "model snapshot" },
+        { "text": "gpt-5.1", "kind": "token", "note": "model alias" },
+        { "text": "gpt-5.1-2025-11-13", "kind": "token", "note": "model snapshot" }
+      ]
+    },
+    {
+      "id": "google-gemini-3-1-flash-lite",
+      "vendor": "Google",
+      "name": "Gemini 3.1 Flash-Lite",
+      "sunset": "2027-05-07",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-3.5-flash-lite",
+      "migration": "Change the model id to gemini-3.5-flash-lite.",
+      "notes": "The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-3.1-flash-lite", "kind": "token", "note": "model id" }
+      ]
+    },
+    {
+      "id": "google-gemini-embedding-001",
+      "vendor": "Google",
+      "name": "gemini-embedding-001",
+      "sunset": "2028-05-14",
+      "source_url": "https://aistudio.google.com/docs/deprecations",
+      "verified_on": "2026-11-11",
+      "replacement": "gemini-embedding-2",
+      "migration": "Change the model id to gemini-embedding-2.",
+      "notes": "The Gemini deprecations page states that the shutdown dates in its tables are the earliest possible dates on which a model might be retired, and that the exact date is communicated with advance notice.",
+      "patterns": [
+        { "text": "gemini-embedding-001", "kind": "token", "note": "model id" }
       ]
     }
   ]

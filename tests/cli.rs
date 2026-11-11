@@ -60,8 +60,9 @@ fn code(out: &Output) -> i32 {
     out.status.code().expect("exit code")
 }
 
-/// The day sunsetscan's own catalog was verified. The Assistants API sunsets
-/// 2026-08-26, so this is 15 days out.
+/// The pinned "today" for these tests: the day the catalog was first verified.
+/// The Assistants API sunsets 2026-08-26, so this is 15 days out. The catalog
+/// itself was last re-verified on 2026-11-11.
 const TODAY: &str = "--as-of=2026-08-11";
 
 /// A repository that calls the Assistants API from Python and from Node.
@@ -113,7 +114,7 @@ fn reports_assistants_api_call_sites_with_line_numbers_and_the_migration_path() 
         "2026-08-26 (15 days remaining)",
         "Responses API and Conversations API",
         "https://developers.openai.com/api/docs/assistants/migration",
-        "https://developers.openai.com/api/docs/deprecations (verified 2026-08-11)",
+        "https://developers.openai.com/api/docs/deprecations (verified 2026-11-11)",
         "will not provide an automated tool",
         "app/agent.py",
         "web/threads.ts",
@@ -122,7 +123,7 @@ fn reports_assistants_api_call_sites_with_line_numbers_and_the_migration_path() 
         "matched /v1/threads",
         "matched assistant_id",
         "nearest deadline: 2026-08-26",
-        "Catalog verified as of 2026-08-11.",
+        "Catalog verified as of 2026-11-11.",
         "vendors move dates",
     ] {
         assert!(text.contains(needle), "missing {needle:?} in:\n{text}");
@@ -185,6 +186,91 @@ fn a_neighbouring_model_id_does_not_match_a_token_pattern() {
     let text = stdout(&run(dir.path(), &[TODAY, "--no-color"]));
     assert!(text.contains("openai-legacy-chat-models"), "{text}");
     assert!(!text.contains("openai-gpt-image-legacy"), "{text}");
+}
+
+#[test]
+fn gemini_model_ids_are_attributed_to_their_own_entries() {
+    // gemini-2.5-flash is rerouted 2026-12-01, gemini-2.5-flash-image shuts
+    // down 2027-03-15, and gemini-2.5-flash-lite has no announced date.
+    let dir = fixture(&[("a.py", "M = \"models/gemini-2.5-flash\"\n")]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    let text = stdout(&out);
+    assert_eq!(code(&out), 1, "20 days out must fail the default threshold");
+    assert!(text.contains("google-gemini-2-5-flash "), "{text}");
+    assert!(text.contains("2026-12-01 (20 days remaining)"), "{text}");
+    assert!(!text.contains("google-gemini-2-5-flash-image"), "{text}");
+
+    let dir = fixture(&[("a.py", "M = \"gemini-2.5-flash-image\"\n")]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    let text = stdout(&out);
+    assert_eq!(code(&out), 0, "{text}");
+    assert!(text.contains("google-gemini-2-5-flash-image"), "{text}");
+    assert!(text.contains("2027-03-15"), "{text}");
+
+    let dir = fixture(&[("a.py", "M = \"gemini-2.5-flash-lite\"\n")]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    assert_eq!(code(&out), 0, "{}", stdout(&out));
+    assert!(stdout(&out).contains("No calls into a sunsetting API were found."));
+}
+
+#[test]
+fn the_claude_sonnet_4_5_snapshot_matches_but_other_claude_ids_do_not() {
+    let dir = fixture(&[("a.ts", "const MODEL = \"claude-sonnet-4-5-20250929\";\n")]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    let text = stdout(&out);
+    assert_eq!(code(&out), 1, "{text}");
+    for needle in [
+        "anthropic-claude-sonnet-4-5",
+        "2026-11-30 (19 days remaining)",
+        "claude-sonnet-5-5",
+        "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+    ] {
+        assert!(text.contains(needle), "missing {needle:?} in:\n{text}");
+    }
+
+    // A different model, and a partner-platform id that embeds the snapshot:
+    // the vendor page gives neither of them this date.
+    let dir = fixture(&[(
+        "a.ts",
+        "const A = \"claude-sonnet-4-6\";\n\
+         const B = \"anthropic.claude-sonnet-4-5-20250929-v1:0\";\n",
+    )]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    assert_eq!(code(&out), 0, "{}", stdout(&out));
+}
+
+#[test]
+fn newer_openai_entries_separate_aliases_snapshots_and_endpoints() {
+    // gpt-image-2 (2027-02-10) must not swallow its 2.6 replacements, and the
+    // audio translations endpoint is matched as a path.
+    let dir = fixture(&[(
+        "a.py",
+        "IMG = \"gpt-image-2\"\n\
+         NEW = \"gpt-image-2.6-flare\"\n\
+         URL = \"https://api.openai.com/v1/audio/translations\"\n\
+         TTS = \"tts-1-hd\"\n\
+         OLD = \"gpt-4o-2024-08-06\"\n\
+         KEEP = \"gpt-4o\"\n",
+    )]);
+    let out = run(dir.path(), &["--as-of=2026-11-11", "--no-color"]);
+    let text = stdout(&out);
+    assert_eq!(code(&out), 0, "nothing here is within 30 days:\n{text}");
+    for needle in [
+        "openai-gpt-image-2",
+        "openai-transcription-models",
+        "matched /v1/audio/translations",
+        "openai-tts-models",
+        "matched tts-1-hd",
+        "openai-gpt4-series-snapshots",
+        "4 finding(s) in 1 file(s), 4 of 24 catalog entr(ies) matched",
+    ] {
+        assert!(text.contains(needle), "missing {needle:?} in:\n{text}");
+    }
+    assert!(!text.contains("matched tts-1 "), "{text}");
+    assert_eq!(
+        code(&run(dir.path(), &["--as-of=2026-11-11", "--strict"])),
+        1
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -472,7 +558,7 @@ fn list_prints_the_catalog_with_dates_and_days_remaining() {
         "beta.threads [substring]",
         "assistant_id [word]",
         "gpt-4-turbo [token]",
-        "Catalog verified as of 2026-08-11.",
+        "Catalog verified as of 2026-11-11.",
         "vendors move dates",
     ] {
         assert!(text.contains(needle), "missing {needle:?} in:\n{text}");
@@ -514,8 +600,8 @@ fn json_output_is_stable_and_has_the_documented_shape() {
         "\"tool\": \"sunsetscan\"",
         "\"schema\": 1",
         "\"as_of\": \"2026-08-11\"",
-        "\"catalog_verified_on\": \"2026-08-11\"",
-        "\"entries_searched\": 10",
+        "\"catalog_verified_on\": \"2026-11-11\"",
+        "\"entries_searched\": 24",
         "\"nearest_deadline\": {\"entry_id\": \"openai-assistants-api\"",
         "\"days_remaining\": 15",
         "\"urgency\": \"critical\"",
@@ -539,7 +625,7 @@ fn quiet_prints_one_line_to_stdout_and_the_caveat_to_stderr() {
     assert_eq!(code(&out), 1);
     assert_eq!(stdout(&out).lines().count(), 1, "{}", stdout(&out));
     assert!(stdout(&out).starts_with("sunsetscan: "));
-    assert!(stderr(&out).contains("Catalog verified as of 2026-08-11"));
+    assert!(stderr(&out).contains("Catalog verified as of 2026-11-11"));
 }
 
 #[test]
